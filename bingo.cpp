@@ -37,7 +37,7 @@ void displayBingoCard(const vector<int>& card) {
 
 // Função para gerar e salvar o arquivo do cartão de bingo
 void generateBingoCardFile(const vector<int>& card, int cardNumber) {
-    ofstream outFile("card" + to_string(cardNumber) + ".txt");
+    ofstream outFile("cartão" + to_string(cardNumber) + ".txt");
     if (outFile.is_open()) {
         for (int i = 0; i < 25; ++i) {
             if (i == 12) {
