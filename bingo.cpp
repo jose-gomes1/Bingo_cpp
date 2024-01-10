@@ -37,7 +37,7 @@ void displayBingoCard(const vector<int>& card) {
 
 // Função para gerar e salvar o arquivo do cartão de bingo
 void generateBingoCardFile(const vector<int>& card, int cardNumber) {
-    ofstream outFile("card" + to_string(cardNumber) + ".txt");
+    ofstream outFile("cartão" + to_string(cardNumber) + ".txt");
     if (outFile.is_open()) {
         for (int i = 0; i < 25; ++i) {
             if (i == 12) {
@@ -60,10 +60,10 @@ int main() {
     srand(time(0));
 
     int numNumbers, numCards;
-    cout << "Escolha o número de sorteio (75, 90, ou 100): ";
+    cout << "Escolhe o número de sorteio (75, 90, ou 100): ";
     cin >> numNumbers;
 
-    cout << "Escolha o número de cartões a serem gerados: ";
+    cout << "Escolhe o número de cartões a serem gerados: ";
     cin >> numCards;
 
     // Geração de cartões de bingo
@@ -88,7 +88,7 @@ int main() {
     // Sorteio
     vector<int> drawnNumbers;
     char drawType;
-    cout << "\nEscolha o tipo de sorteio (a para automático, m para manual): ";
+    cout << "\nEscolhe o tipo de sorteio (a para automático, m para manual): ";
     cin >> drawType;
 
     if (drawType == 'a' || drawType == 'A') {
@@ -107,13 +107,13 @@ int main() {
         cout << endl;
     } else if (drawType == 'm' || drawType == 'M') {
         for (int i = 1; i <= numNumbers; ++i) {
-            cout << "Pressione qualquer tecla para sortear o próximo número...";
+            cout << "Pressiona qualquer tecla para sortear o próximo número...";
             cin.get();
             int drawnNumber = rand() % numNumbers + 1;
             drawnNumbers.push_back(drawnNumber);
         }
     } else {
-        cout << "Opção inválida. Escolha 'a' para automático ou 'm' para manual." << endl;
+        cout << "Opção inválida. Escolhe 'a' para automático ou 'm' para manual." << endl;
         return 1;
     }
 
