@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -37,7 +38,7 @@ void displayBingoCard(const vector<int>& card) {
 
 // Função para gerar e salvar o arquivo do cartão de bingo
 void generateBingoCardFile(const vector<int>& card, int cardNumber) {
-    ofstream outFile("cartão" + to_string(cardNumber) + ".txt");
+    ofstream outFile("cartao" + to_string(cardNumber) + ".txt");
     if (outFile.is_open()) {
         for (int i = 0; i < 25; ++i) {
             if (i == 12) {
@@ -54,6 +55,22 @@ void generateBingoCardFile(const vector<int>& card, int cardNumber) {
     } else {
         cout << "Erro ao abrir o arquivo para escrita." << endl;
     }
+}
+
+// Função para exibir a tabela com destaque em vermelho nos números sorteados
+void displayNumberTable(const vector<int>& drawnNumbers, int numNumbers) {
+    cout << "Tabela de Números Sorteados:" << endl;
+    for (int i = 1; i <= numNumbers; ++i) {
+        if (find(drawnNumbers.begin(), drawnNumbers.end(), i) != drawnNumbers.end()) {
+            cout << "\033[1;31m" << i << " \033[0m"; // Destacar em vermelho
+        } else {
+            cout << i << " ";
+        }
+        if (i % 10 == 0) {
+            cout << endl;
+        }
+    }
+    cout << endl;
 }
 
 int main() {
@@ -96,21 +113,42 @@ int main() {
 
         for (int i = 1; i <= numNumbers; ++i) {
             int drawnNumber = rand() % numNumbers + 1;
-            drawnNumbers.push_back(drawnNumber);
-        }
+            
+            // Exibir números atual e anterior
+            if (i > 1) {
+                cout << "Número Anterior: " << drawnNumbers.back() << ", Número Atual: " << drawnNumber << endl;
+            } else {
+                cout << "Número Atual: " << drawnNumber << endl;
+            }
 
-        // Exibição do painel com todos os números sorteados
-        cout << "Painel de Números Sorteados:" << endl;
-        for (int i = 0; i < numNumbers; ++i) {
-            cout << drawnNumbers[i] << " ";
+            drawnNumbers.push_back(drawnNumber);
+
+            // Aguarda por 1 segundo entre os sorteios
+            this_thread::sleep_for(chrono::seconds(1));
+            system("clear || cls");
+
+            // Exibição da tabela com todos os números
+            displayNumberTable(drawnNumbers, numNumbers);
         }
-        cout << endl;
     } else if (drawType == 'm' || drawType == 'M') {
         for (int i = 1; i <= numNumbers; ++i) {
             cout << "Pressiona qualquer tecla para sortear o próximo número...";
-            cin.get();
+            cin.ignore();  // Ignora qualquer caractere pendente no buffer
+            cin.get();     // Aguarda o usuário pressionar uma tecla
             int drawnNumber = rand() % numNumbers + 1;
+
+            // Exibir números atual e anterior
+            if (i > 1) {
+                cout << "Número Anterior: " << drawnNumbers.back() << ", Número Atual: " << drawnNumber << endl;
+            } else {
+                cout << "Número Atual: " << drawnNumber << endl;
+            }
+
             drawnNumbers.push_back(drawnNumber);
+            system("clear || cls");
+
+            // Exibição da tabela com todos os números
+            displayNumberTable(drawnNumbers, numNumbers);
         }
     } else {
         cout << "Opção inválida. Escolhe 'a' para automático ou 'm' para manual." << endl;
