@@ -27,4 +27,6 @@ string BOLD = "\u001b[1m";
 typedef struct {
     int numero;
     bool sorteado;
-} bingoBall;
+} bingoPanel;
+
+bingoPanel bingo[] = {};

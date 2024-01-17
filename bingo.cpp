@@ -82,6 +82,14 @@ void displayNumberTable(const vector<int>& drawnNumbers, int numNumbers) {
     cout << endl;
 }
 
+// Função para exibir o número sorteado em ASCII
+void displayAsciiNumber(int drawnNumber, int numRemaining) {
+    cout << BLUE << BOLD << "Números Restantes: " << RESET << numRemaining << endl;
+    cout << "_____________________" << endl;
+    cout << "|                   |" << endl;
+    cout << "|   " << setw(2) << drawnNumber << "   |" << endl;
+    cout << "|___________________|" << RESET << endl;
+}  
 int main() {
     srand(time(0));
 
@@ -130,7 +138,7 @@ int main() {
 
         for (int i = 1; i <= numNumbers; ++i) {
             int drawnNumber = rand() % numNumbers + 1;
-            
+
             // Exibir números atual e anterior
             if (i > 1) {
                 cout << "Número Anterior: " << drawnNumbers.back() << ", Número Atual: " << drawnNumber << endl;
@@ -146,6 +154,9 @@ int main() {
 
             // Exibição da tabela com todos os números
             displayNumberTable(drawnNumbers, numNumbers);
+
+            // Exibição do número sorteado em ASCII
+            displayAsciiNumber(drawnNumber, numNumbers - i);
         }
     } else if (drawType == 'm' || drawType == 'M') {
         for (int i = 1; i <= numNumbers; ++i) {
@@ -166,6 +177,9 @@ int main() {
 
             // Exibição da tabela com todos os números
             displayNumberTable(drawnNumbers, numNumbers);
+
+            // Exibição do número sorteado em ASCII
+            displayAsciiNumber(drawnNumber, numNumbers - i);
         }
     } else {
         cout << RED << "Opção inválida. Escolhe 'a' para automático ou 'm' para manual." << RESET << endl;
