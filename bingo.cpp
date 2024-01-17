@@ -87,7 +87,7 @@ void displayAsciiNumber(int drawnNumber, int numRemaining) {
     cout << BLUE << BOLD << "Números Restantes: " << RESET << numRemaining << endl;
     cout << "_____________________" << endl;
     cout << "|                   |" << endl;
-    cout << "|   " << setw(2) << drawnNumber << "   |" << endl;
+    cout << "|" << setw(10) << drawnNumber << setw(10) << " |" << endl;
     cout << "|___________________|" << RESET << endl;
 }  
 int main() {
