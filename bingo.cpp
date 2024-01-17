@@ -1,13 +1,22 @@
 #include <iostream>
-#include <fstream>
-#include <vector>
+#include <iomanip>
 #include <ctime>
 #include <cstdlib>
+#include <unistd.h>
+#include <fstream>
+#include <vector>
 #include <algorithm>
 #include <thread>
 #include <chrono>
 
 using namespace std;
+
+// Definição de cores ANSI
+string BLUE = "\033[34m";
+string RED = "\033[1;31m";
+string GREEN = "\033[32m";
+string RESET = "\033[0m";
+string BOLD = "\u001b[1m";
 
 // Função para gerar números únicos aleatórios
 vector<int> generateUniqueNumbers(int min, int max, int count) {
@@ -30,7 +39,7 @@ void displayBingoCard(const vector<int>& card) {
         if (i == 12) {
             cout << " -   ";
         } else {
-            cout << (card[i] == 0 ? " 0   " : to_string(card[i]) + "   ");
+            cout << (card[i] == 0 ? BLUE + " 0   " + RESET : BLUE + to_string(card[i]) + "   " + RESET);
         }
     }
     cout << endl << endl;
@@ -51,20 +60,20 @@ void generateBingoCardFile(const vector<int>& card, int cardNumber) {
             }
         }
         outFile.close();
-        cout << "Cartão " << cardNumber << " salvo com sucesso." << endl;
+        cout << GREEN << "Cartão " << cardNumber << " salvo com sucesso." << RESET << endl;
     } else {
-        cout << "Erro ao abrir o arquivo para escrita." << endl;
+        cout << RED << "Erro ao abrir o arquivo para escrita." << RESET << endl;
     }
 }
 
 // Função para exibir a tabela com destaque em vermelho nos números sorteados
 void displayNumberTable(const vector<int>& drawnNumbers, int numNumbers) {
-    cout << "Tabela de Números Sorteados:" << endl;
+    cout << BLUE << BOLD << "Tabela de Números Sorteados:" << RESET << endl;
     for (int i = 1; i <= numNumbers; ++i) {
         if (find(drawnNumbers.begin(), drawnNumbers.end(), i) != drawnNumbers.end()) {
-            cout << "\033[1;31m" << i << " \033[0m"; // Destacar em vermelho
+            cout << RED << i << " " << RESET; // Destacar em vermelho
         } else {
-            cout << i << " ";
+            cout << GREEN << i << " " << RESET;
         }
         if (i % 10 == 0) {
             cout << endl;
@@ -77,10 +86,10 @@ int main() {
     srand(time(0));
 
     int numNumbers, numCards;
-    cout << "Escolhe o número de sorteio (75, 90, ou 100): ";
+    cout << BLUE << "Escolhe o número de sorteio (75, 90, ou 100): ";
     cin >> numNumbers;
 
-    cout << "Escolhe o número de cartões a serem gerados: ";
+    cout << BLUE << "Escolhe o número de cartões a serem gerados: ";
     cin >> numCards;
 
     // Geração de cartões de bingo
@@ -96,20 +105,28 @@ int main() {
     }
 
     // Exibição dos cartões
-    cout << "Cartões de bingo gerados: " << endl;
+    cout << BLUE << "Cartões de bingo gerados:" << RESET << endl;
     for (int i = 0; i < numCards; ++i) {
-        cout << "Cartão " << i + 1 << ":" << endl;
+        cout << GREEN << "Cartão " << i + 1 << ":" << RESET << endl;
         displayBingoCard(cards[i]);
+    }
+
+    // Opção de sair
+    char exitOption;
+    cout << "Deseja sair? (s para sim, qualquer outra tecla para continuar): ";
+    cin >> exitOption;
+    if (exitOption == 's' || exitOption == 'S') {
+        return 0;
     }
 
     // Sorteio
     vector<int> drawnNumbers;
     char drawType;
-    cout << "\nEscolhe o tipo de sorteio (a para automático, m para manual): ";
+    cout << BLUE << "\nEscolhe o tipo de sorteio (a para automático, m para manual): ";
     cin >> drawType;
 
     if (drawType == 'a' || drawType == 'A') {
-        cout << "\nSorteio Automático Iniciado..." << endl;
+        cout << BLUE << BOLD << "\nSorteio Automático Iniciado..." << endl;
 
         for (int i = 1; i <= numNumbers; ++i) {
             int drawnNumber = rand() % numNumbers + 1;
@@ -151,7 +168,7 @@ int main() {
             displayNumberTable(drawnNumbers, numNumbers);
         }
     } else {
-        cout << "Opção inválida. Escolhe 'a' para automático ou 'm' para manual." << endl;
+        cout << RED << "Opção inválida. Escolhe 'a' para automático ou 'm' para manual." << RESET << endl;
         return 1;
     }
 
