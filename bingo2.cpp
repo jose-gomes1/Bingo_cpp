@@ -23,6 +23,7 @@ string RED = "\033[1;31m";
 string GREEN = "\033[32m";
 string RESET = "\033[0m";
 string BOLD = "\u001b[1m";
+string BLINK = "\u001b[5m";
 
 typedef struct {
     int numero;

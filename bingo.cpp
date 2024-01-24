@@ -89,18 +89,15 @@ void displayAsciiNumber(int drawnNumber, int numRemaining) {
     cout << "|                   |" << endl;
     cout << "|" << setw(10) << drawnNumber << setw(10) << " |" << endl;
     cout << "|___________________|" << RESET << endl;
-}  
-int main() {
-    srand(time(0));
+}
 
-    int numNumbers, numCards;
-    cout << BLUE << "Escolhe o número de sorteio (75, 90, ou 100): ";
-    cin >> numNumbers;
+// Função para gerar cartões de bingo
+vector<vector<int>> generateBingoCards(int numCards, int numNumbers) {
+    if (numNumbers != 75 && numNumbers != 90 && numNumbers != 100) {
+        cout << RED << "Número de bingo inválido. Escolhe entre 75, 90 ou 100." << RESET << endl;
+        return vector<vector<int>>();  // Retorna um vetor vazio se o número for inválido
+    }
 
-    cout << BLUE << "Escolhe o número de cartões a serem gerados: ";
-    cin >> numCards;
-
-    // Geração de cartões de bingo
     vector<vector<int>> cards;
     for (int i = 1; i <= numCards; ++i) {
         vector<int> numbers = generateUniqueNumbers(1, numNumbers, 25);
@@ -111,80 +108,114 @@ int main() {
         cards.push_back(numbers);
         generateBingoCardFile(numbers, i);
     }
+    return cards;
+}
 
-    // Exibição dos cartões
-    cout << BLUE << "Cartões de bingo gerados:" << RESET << endl;
-    for (int i = 0; i < numCards; ++i) {
-        cout << GREEN << "Cartão " << i + 1 << ":" << RESET << endl;
-        displayBingoCard(cards[i]);
-    }
+int main() {
+    srand(time(0));
 
-    // Opção de sair
-    char exitOption;
-    cout << "Deseja sair? (s para sim, qualquer outra tecla para continuar): ";
-    cin >> exitOption;
-    if (exitOption == 's' || exitOption == 'S') {
-        return 0;
-    }
+    int numNumbers, numCards;
+    char menuOption;
 
-    // Sorteio
-    vector<int> drawnNumbers;
-    char drawType;
-    cout << BLUE << "\nEscolhe o tipo de sorteio (a para automático, m para manual): ";
-    cin >> drawType;
+    do {
+        cout << "\n===== Menu Inicial =====" << endl;
+        cout << "1. Sorteio Automático" << endl;
+        cout << "2. Sorteio Manual" << endl;
+        cout << "3. Gerar Cartões" << endl;
+        cout << "4. Sair" << endl;
+        cout << "Escolhe a opção desejada (1/2/3/4): ";
+        cin >> menuOption;
 
-    if (drawType == 'a' || drawType == 'A') {
-        cout << BLUE << BOLD << "\nSorteio Automático Iniciado..." << endl;
+        switch (menuOption) {
+            case '1': {
+                cout << BLUE << "Escolhe o número de sorteio (75, 90, ou 100): ";
+                cin >> numNumbers;
 
-        for (int i = 1; i <= numNumbers; ++i) {
-            int drawnNumber = rand() % numNumbers + 1;
+                // Sorteio Automático
+                vector<int> drawnNumbers;
+                cout << BLUE << BOLD << "\nSorteio Automático Iniciado..." << endl;
 
-            // Exibir números atual e anterior
-            if (i > 1) {
-                cout << "Número Anterior: " << drawnNumbers.back() << ", Número Atual: " << drawnNumber << endl;
-            } else {
-                cout << "Número Atual: " << drawnNumber << endl;
+                for (int i = 1; i <= numNumbers; ++i) {
+                    int drawnNumber = rand() % numNumbers + 1;
+
+                    // Exibir números atual e anterior
+                    if (i > 1) {
+                        cout << "Número Anterior: " << drawnNumbers.back() << ", Número Atual: " << drawnNumber << endl;
+                    } else {
+                        cout << "Número Atual: " << drawnNumber << endl;
+                    }
+
+                    drawnNumbers.push_back(drawnNumber);
+
+                    // Aguarda por 1 segundo entre os sorteios
+                    this_thread::sleep_for(chrono::seconds(1));
+                    system("clear || cls");
+
+                    // Exibição da tabela com todos os números
+                    displayNumberTable(drawnNumbers, numNumbers);
+
+                    // Exibição do número sorteado em ASCII
+                    displayAsciiNumber(drawnNumber, numNumbers - i);
+                }
+                break;
             }
+            case '2': {
+                cout << BLUE << "Escolhe o número de sorteio (75, 90, ou 100): ";
+                cin >> numNumbers;
 
-            drawnNumbers.push_back(drawnNumber);
+                // Sorteio Manual
+                vector<int> drawnNumbers;
+                for (int i = 1; i <= numNumbers; ++i) {
+                    cout << "Pressiona qualquer tecla para sortear o próximo número...";
+                    cin.ignore();  // Ignora qualquer caractere pendente no buffer
+                    cin.get();     // Aguarda o usuário pressionar uma tecla
+                    int drawnNumber = rand() % numNumbers + 1;
 
-            // Aguarda por 1 segundo entre os sorteios
-            this_thread::sleep_for(chrono::seconds(1));
-            system("clear || cls");
+                    // Exibir números atual e anterior
+                    if (i > 1) {
+                        cout << "Número Anterior: " << drawnNumbers.back() << ", Número Atual: " << drawnNumber << endl;
+                    } else {
+                        cout << "Número Atual: " << drawnNumber << endl;
+                    }
 
-            // Exibição da tabela com todos os números
-            displayNumberTable(drawnNumbers, numNumbers);
+                    drawnNumbers.push_back(drawnNumber);
+                    system("clear || cls");
 
-            // Exibição do número sorteado em ASCII
-            displayAsciiNumber(drawnNumber, numNumbers - i);
-        }
-    } else if (drawType == 'm' || drawType == 'M') {
-        for (int i = 1; i <= numNumbers; ++i) {
-            cout << "Pressiona qualquer tecla para sortear o próximo número...";
-            cin.ignore();  // Ignora qualquer caractere pendente no buffer
-            cin.get();     // Aguarda o usuário pressionar uma tecla
-            int drawnNumber = rand() % numNumbers + 1;
+                    // Exibição da tabela com todos os números
+                    displayNumberTable(drawnNumbers, numNumbers);
 
-            // Exibir números atual e anterior
-            if (i > 1) {
-                cout << "Número Anterior: " << drawnNumbers.back() << ", Número Atual: " << drawnNumber << endl;
-            } else {
-                cout << "Número Atual: " << drawnNumber << endl;
+                    // Exibição do número sorteado em ASCII
+                    displayAsciiNumber(drawnNumber, numNumbers - i);
+                }
+                break;
             }
+            case '3': {
+                int bingoSize;
+                cout << BLUE << "Escolhe o tamanho do bingo (75, 90 ou 100): ";
+                cin >> numNumbers;  // Atualizado para numNumbers
+                cout << BLUE << "Escolhe o número de cartões a serem gerados: ";
+                cin >> numCards;
 
-            drawnNumbers.push_back(drawnNumber);
-            system("clear || cls");
+                // Geração de cartões de bingo
+                vector<vector<int>> cards = generateBingoCards(numCards, numNumbers);
 
-            // Exibição da tabela com todos os números
-            displayNumberTable(drawnNumbers, numNumbers);
-
-            // Exibição do número sorteado em ASCII
-            displayAsciiNumber(drawnNumber, numNumbers - i);
+                // Exibição dos cartões
+                if (!cards.empty()) {
+                    cout << BLUE << "Cartões de bingo gerados:" << RESET << endl;
+                    for (int i = 0; i < numCards; ++i) {
+                        cout << GREEN << "Cartão " << i + 1 << ":" << RESET << endl;
+                        displayBingoCard(cards[i]);
+                    }
+                }
+                break;
+            }
+            case '4':
+                cout << "A sair do programa. Até logo!" << endl;
+                break;
+            default:
+                cout << RED << "Opção inválida. Escolhe 1, 2, 3 ou 4." << RESET << endl;
         }
-    } else {
-        cout << RED << "Opção inválida. Escolhe 'a' para automático ou 'm' para manual." << RESET << endl;
-        return 1;
-    }
+    } while (menuOption != '4');
 
     return 0;
 }
