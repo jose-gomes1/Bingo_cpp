@@ -140,7 +140,7 @@ int main() {
 
                     // Exibir números atual e anterior
                     if (i > 1) {
-                        cout << "Número Anterior: " << drawnNumbers.back() << ", Número Atual: " << drawnNumber << endl;
+                        cout << "Número Atual: " << drawnNumbers.back() << endl;
                     } else {
                         cout << "Número Atual: " << drawnNumber << endl;
                     }
@@ -173,7 +173,7 @@ int main() {
 
                     // Exibir números atual e anterior
                     if (i > 1) {
-                        cout << "Número Anterior: " << drawnNumbers.back() << ", Número Atual: " << drawnNumber << endl;
+                        cout << "Número Atual: " << drawnNumbers.back() << endl;
                     } else {
                         cout << "Número Atual: " << drawnNumber << endl;
                     }
